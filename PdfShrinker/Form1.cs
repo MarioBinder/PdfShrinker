@@ -1,23 +1,19 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
-using DatajugV2.ReportCardImporter.Converters;
+﻿using DatajugV2.ReportCardImporter.Converters;
 using Ghostscript.NET;
 using Ghostscript.NET.Processor;
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Threading.Tasks;
+using System.Windows.Forms;
 
 namespace PdfShrinker
 {
     public partial class frmMain : Form
     {
         private GhostscriptVersionInfo _gs_verssion_info;
-           
+
 
         private WordToPdf _wordConverter;
         private PublisherToPdf _publisherConverter;
@@ -35,7 +31,7 @@ namespace PdfShrinker
             this.comboBoxQuality_SelectedIndexChanged(this, null);
         }
 
-        
+
 
         void frmMain_DragDrop(object sender, DragEventArgs e)
         {
@@ -64,7 +60,7 @@ namespace PdfShrinker
 
         private void ProcessFiles(string[] files)
         {
-            var formats = new string[] {".docx", ".doc", ".pub", ".pubx"};
+            var formats = new string[] { ".docx", ".doc", ".pub", ".pubx" };
             UIThread(() =>
             {
                 this.AllowDrop = false;
@@ -80,7 +76,7 @@ namespace PdfShrinker
             foreach (var file in files)
             {
                 var sourceFile = file;
-                
+
                 var fileInfo = new FileInfo(sourceFile);
 
                 var newFilename = Path.Combine(fileInfo.DirectoryName,
@@ -128,7 +124,7 @@ namespace PdfShrinker
 
                 // MessageBox.Show("Conversion Complete");
             });
-            
+
         }
 
         private string ConvertToPdf(string sourceFile)
@@ -155,12 +151,12 @@ namespace PdfShrinker
 
         private void CompressDocument(string path, string outpath)
         {
-            
+
 
             // Sourced from https://gist.github.com/firstdoit/6390547
             List<string> gsArgs = new List<string>();
 
-            
+
             gsArgs.Add("-empty");
             gsArgs.Add("-dSAFER");
             gsArgs.Add("-dBATCH");
@@ -168,6 +164,20 @@ namespace PdfShrinker
             gsArgs.Add("-dNOPROMPT");
 
             gsArgs.Add("-sDEVICE=pdfwrite");
+            gsArgs.Add("-sPAPERSIZE=a4");
+            gsArgs.Add("-dDownsampleColorImages=true");
+            gsArgs.Add("-dDownsampleGrayImages=true");
+            gsArgs.Add("-dDownsampleMonoImages=true");
+            gsArgs.Add("-dColorImageResolution=150");
+            gsArgs.Add("-dGrayImageResolution=150");
+            gsArgs.Add("-dMonoImageResolution=150");
+            gsArgs.Add("-dColorImageDownsampleThreshold=1.0");
+            gsArgs.Add("-dGrayImageDownsampleThreshold=1.0");
+            gsArgs.Add("-dMonoImageDownsampleThreshold=1.0");
+            gsArgs.Add("-dFIXEDMEDIA");
+            gsArgs.Add("-dPDFFitPage");
+           
+            
             gsArgs.Add("-dCompatibilityLevel=1.4");
             // dPDFSETTINGS is basically our commpression option
             //  - /screen selects low-resolution output similar to the Acrobat Distiller "Screen Optimized" setting.
@@ -175,7 +185,7 @@ namespace PdfShrinker
             //  - /printer selects output similar to the Acrobat Distiller "Print Optimized" setting.
             //  - /prepress selects output similar to Acrobat Distiller "Prepress Optimized" setting.
             //  - /default selects output intended to be useful across a wide variety of uses, possibly at the expense of a larger output file.
-            gsArgs.Add("-dPDFSETTINGS=/" + this._quality);
+            // gsArgs.Add("-dPDFSETTINGS=/" + this._quality);
 
 
             gsArgs.Add("-sOutputFile=" + outpath + "");
@@ -193,10 +203,10 @@ namespace PdfShrinker
 
                 processor.StartProcessing(gsArgs.ToArray(), null);
 
-                
+
             }
 
-            
+
         }
 
         void processor_Completed(object sender, GhostscriptProcessorEventArgs e)
