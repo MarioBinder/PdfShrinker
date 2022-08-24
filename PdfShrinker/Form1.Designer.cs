@@ -99,11 +99,10 @@
             // 
             this.comboBoxQuality.FormattingEnabled = true;
             this.comboBoxQuality.Items.AddRange(new object[] {
-            "screen",
-            "ebook",
-            "printer",
-            "prepress",
-            "default"});
+            "72 DPI",
+            "150 DPI",
+            "300 DPI",
+            "600 DPI"});
             this.comboBoxQuality.Location = new System.Drawing.Point(244, 12);
             this.comboBoxQuality.Name = "comboBoxQuality";
             this.comboBoxQuality.Size = new System.Drawing.Size(70, 21);

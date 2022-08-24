@@ -168,16 +168,16 @@ namespace PdfShrinker
             gsArgs.Add("-dDownsampleColorImages=true");
             gsArgs.Add("-dDownsampleGrayImages=true");
             gsArgs.Add("-dDownsampleMonoImages=true");
-            gsArgs.Add("-dColorImageResolution=150");
-            gsArgs.Add("-dGrayImageResolution=150");
-            gsArgs.Add("-dMonoImageResolution=150");
+            gsArgs.Add($"-dColorImageResolution={this._quality}");
+            gsArgs.Add($"-dGrayImageResolution={this._quality}");
+            gsArgs.Add($"-dMonoImageResolution={this._quality}");
             gsArgs.Add("-dColorImageDownsampleThreshold=1.0");
             gsArgs.Add("-dGrayImageDownsampleThreshold=1.0");
             gsArgs.Add("-dMonoImageDownsampleThreshold=1.0");
             gsArgs.Add("-dFIXEDMEDIA");
             gsArgs.Add("-dPDFFitPage");
-           
-            
+
+
             gsArgs.Add("-dCompatibilityLevel=1.4");
             // dPDFSETTINGS is basically our commpression option
             //  - /screen selects low-resolution output similar to the Acrobat Distiller "Screen Optimized" setting.
@@ -263,7 +263,7 @@ namespace PdfShrinker
 
         private void comboBoxQuality_SelectedIndexChanged(object sender, EventArgs e)
         {
-            this._quality = comboBoxQuality.Text;
+            this._quality = comboBoxQuality.Text.Split(' ')[0];
         }
     }
 }
